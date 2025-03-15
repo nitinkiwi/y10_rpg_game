@@ -26,7 +26,7 @@ player_stats = {
     'Health':10,
     'Damage':10,
     'Healing':5,
-    'Gold':300, 
+    'Gold':0, 
     'Ability':'dodge',
 }
 ability_upgrades_cost = {
@@ -67,7 +67,7 @@ enemy_stats = {
     'Name':enemy_names_list[random_chance(len(enemy_names_list)-1)],
     'Health':enemy_health_list[enemy_level],
     'Damage':enemy_damage_list[enemy_level],
-    'Gold reward':enemy_reward_list[enemy_level] 
+    'Gold reward':enemy_reward_list[enemy_level],
 }
 
 del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
@@ -203,7 +203,7 @@ def attack(attacker, attacked):
             time.sleep(1)
             print(f'You still have {player_stats['Health']} health.')
 
-for i in range(0,6):
+for i in range(0,len(enemy_names_list)):
     print(f'\nYou now enter the next room of the dungeons.\n\nInside is an enemy: {enemy_stats['Name']}!')
     time.sleep(1)
     print(f"\nHere are {enemy_stats['Name']}'s stats:\n")
@@ -228,6 +228,7 @@ for i in range(0,6):
     time.sleep(2)
     player_stats['Gold'] = player_stats['Gold'] + enemy_stats['Gold reward']
     print(f'You have in total {player_stats['Gold']} gold.')
+    time.sleep(1)
     print("\nYou go into the next room of the dungeons. To your suprise, there is an adventurer's shop there!")
     time.sleep(2)
     shop_item = input(f"\nWhich upgrade do you want?\n1. Add 10 to your damage stat. (70 gold)\n2. Add 5 to your healing stat. (50 gold)\n3. Gain 30 health. (50 gold)\n4. Ability upgrade: {ability_upgrades[player_stats['Ability']]} ({ability_upgrades_cost[player_stats['Ability']]} gold)\n\nEnter the number of the upgrade you want or 'q' if you do not want an upgrade: ")
