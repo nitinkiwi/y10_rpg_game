@@ -25,7 +25,7 @@ player_stats = {
     'Species':'none',
     'Health':10,
     'Damage':10,
-    'Healing':5,
+    'Healing':10,
     'Gold':0, 
     'Ability':'dodge',
 }
@@ -53,7 +53,7 @@ shop_item_costs = {
 }
 ability_list = ['dodge','extra healing','double damage','rebound', 'rizz']
 
-enemy_names_list = ['Mushroom Ma','GG Master','Grubular','Fish','The Walking Stick','Timothy']
+enemy_names_list = ['Mushroom Ma','The GG Master','Grubular','Fish','The Walking Stick','Timothy']
 
 enemy_health_list = [100,125,150,175,200,280]
 
@@ -302,3 +302,19 @@ for i in range(0,len(enemy_names_list)):
     }
 
     del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
+
+print('\nYou beat the final enemy in the dungeons!')
+time.sleep(1)
+print('\nThere is golden light coming from the door ahead of you.')
+time.sleep(1)
+print('\nYou go through to door into what seems to be the final room of the dungeons.')
+time.sleep(1)
+print('\nOn a pedestal in front of you is the drippy hoodie, a garment that will give the wearer infinite aura.')
+time.sleep(1)
+print('\nYou take the hoodie and leave the dungeons, becoming a hero!')
+time.sleep(1)
+print('\nCongrats on beating the game!')
+time.sleep(5)
+print('\n\nCredits:')
+print('\nCreated and programed by Nitin Keswani.')
+print('\nAll rights reserved. Copyright 2025 to Nitin Keswani')
