@@ -11,7 +11,7 @@ ability_percentages = {
     'rizz':5,
 }
 
-abilities = {
+ability_description = {
     'dodge':f"This ability gives you a {ability_percentages['dodge']} percent chance every turn to dodge an opponent's attack.",
     'extra healing':f"This ability lets you heal 5 health more than your base stat.",
     'double damage':f"This ability gives you a {ability_percentages['double damage']} percent chance every turn of dealing double damage.",
@@ -120,7 +120,7 @@ choose_stats(player_stats['Species'])
 
 print('\nHere are your stats:\n')
 print('\n'.join("{}: {}".format(k, v) for k, v in player_stats.items()))
-print(abilities[player_stats['Ability']])
+print(ability_description[player_stats['Ability']])
 
 time.sleep(0.2)
 
@@ -206,9 +206,9 @@ def attack(attacker, attacked):
 for i in range(0,6):
     print(f'\nYou now enter the next room of the dungeons.\n\nInside is an enemy: {enemy_stats['Name']}!')
     time.sleep(1)
-    print(f"\nHere is {enemy_stats['Name']}'s stats:\n")
+    print(f"\nHere are {enemy_stats['Name']}'s stats:\n")
     print('\n'.join("{}: {}".format(k, v) for k, v in enemy_stats.items()))
-    input('(Press enter to continue) ')
+    input('\n(Press enter to continue) ')
     print('\nYou fight!')
 
     while player_stats['Health'] > 0 and enemy_stats['Health'] > 0:
@@ -227,7 +227,7 @@ for i in range(0,6):
     print(f'\nYou earned {str(enemy_stats['Gold reward'])} gold!')
     time.sleep(2)
     player_stats['Gold'] = player_stats['Gold'] + enemy_stats['Gold reward']
-    print(f'Your total gold is {player_stats['Gold']}.')
+    print(f'You have in total {player_stats['Gold']} gold.')
     print("\nYou go into the next room of the dungeons. To your suprise, there is an adventurer's shop there!")
     time.sleep(2)
     shop_item = input(f"\nWhich upgrade do you want?\n1. Add 10 to your damage stat. (70 gold)\n2. Add 5 to your healing stat. (50 gold)\n3. Gain 30 health. (50 gold)\n4. Ability upgrade: {ability_upgrades[player_stats['Ability']]} ({ability_upgrades_cost[player_stats['Ability']]} gold)\n\nEnter the number of the upgrade you want or 'q' if you do not want an upgrade: ")
@@ -259,9 +259,13 @@ for i in range(0,6):
         elif player_stats['Ability'] == 'rizz':
             ability_percentages['rizz'] = ability_percentages['rizz'] + 2
         elif player_stats['Ability'] == 'Your species does not have an ability.':
+            # The extra 240 gold take away is because it cost 350 gold to get an ability and only 110 to upgrade an ability.
+            player_stats['Gold'] = player_stats['Gold'] - 240
             player_stats['Ability'] = ability_list[random_chance(3)]
             print(f'Your new ability is {player_stats['Ability']}.')
-            print(abilities[player_stats['Ability']])
+            time.sleep(2)
+            print(ability_description[player_stats['Ability']])
+            time.sleep(2)
         else:
             print('Your species does not have an ability so for you this upgrade is not valid.')
     elif shop_item == 'q':
@@ -270,13 +274,22 @@ for i in range(0,6):
         print("\nYou didn't have enough gold to purchase that item.")
     else:
         print('That is not a valid item to purchase.')
+
+    ability_description = {
+        'dodge':f"This ability gives you a {ability_percentages['dodge']} percent chance every turn to dodge an opponent's attack.",
+        'extra healing':f"This ability lets you heal 5 health more than your base stat.",
+        'double damage':f"This ability gives you a {ability_percentages['double damage']} percent chance every turn of dealing double damage.",
+        'rebound':f"This ability gives you a {ability_percentages['rebound']} percent chance every turn of rebounding an enemy's attack back at them.",
+        'rizz':f'This ability gives you a {ability_percentages['rizz']} percent chance every turn of rizzing up your enemy and winning the battle.',
+        'Your species does not have an ability.':''
+    }
     # Representing stats after upgrades and the battle.
     time.sleep(1)
     print('\nHere are your stats after your battle:\n')
     time.sleep(1)
     print('\n'.join("{}: {}".format(k, v) for k, v in player_stats.items()))
-    print(abilities[player_stats['Ability']])
-    input('(Press enter to continue)')
+    print(ability_description[player_stats['Ability']])
+    input('(Press enter to continue) ')
 
     enemy_level = enemy_level + 1
 
