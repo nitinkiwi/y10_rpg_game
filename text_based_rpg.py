@@ -64,7 +64,7 @@ enemy_reward_list = [50,70,100,150,200,250]
 enemy_level = 0
 
 enemy_stats = {
-    'Name':enemy_names_list[random_chance(len(enemy_names_list)-1)],
+    'Name':enemy_names_list[random_chance(len(enemy_names_list))],
     'Health':enemy_health_list[enemy_level],
     'Damage':enemy_damage_list[enemy_level],
     'Gold reward':enemy_reward_list[enemy_level],
@@ -92,7 +92,11 @@ double_damage_multiplier = 2
 # Intro
 print('Welcome adventurer! Before you lies the entrance to the dungeons.')
 time.sleep(0.2)
-player_stats['Name'] = input('You are a brave one for coming here! What may your name be? ')
+print('They say an amulet that gives the wearer max aura is hidden in the depths of the dungeons.')
+time.sleep(2)
+print('But it is protected by many powerful and beastly guardians.')
+time.sleep(2)
+player_stats['Name'] = input('If it is the amulet you seek, you are brave for coming here! What may your name be? ')
 time.sleep(0.5)
 print(f'Welcome to the dungeons {player_stats['Name'].title()}!')
 time.sleep(0.2)
@@ -263,6 +267,8 @@ for i in range(0,len(enemy_names_list)):
             # The extra 240 gold take away is because it cost 350 gold to get an ability and only 110 to upgrade an ability.
             player_stats['Gold'] = player_stats['Gold'] - 240
             player_stats['Ability'] = ability_list[random_chance(3)]
+            if player_stats['Ability'] == 'extra healing':
+                player_stats['Healing'] = player_stats['Healing'] + 5
             print(f'Your new ability is {player_stats['Ability']}.')
             time.sleep(2)
             print(ability_description[player_stats['Ability']])
@@ -295,7 +301,7 @@ for i in range(0,len(enemy_names_list)):
     enemy_level = enemy_level + 1
 
     enemy_stats = {
-        'Name':enemy_names_list[random_chance(len(enemy_names_list)-1)],
+        'Name':enemy_names_list[random_chance(len(enemy_names_list))],
         'Health':enemy_health_list[enemy_level],
         'Damage':enemy_damage_list[enemy_level],
         'Gold reward':enemy_reward_list[enemy_level] 
@@ -303,18 +309,31 @@ for i in range(0,len(enemy_names_list)):
 
     del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
 
-print('\nYou beat the final enemy in the dungeons!')
-time.sleep(1)
-print('\nThere is golden light coming from the door ahead of you.')
-time.sleep(1)
-print('\nYou go through to door into what seems to be the final room of the dungeons.')
-time.sleep(1)
-print('\nOn a pedestal in front of you is the drippy hoodie, a garment that will give the wearer infinite aura.')
-time.sleep(1)
-print('\nYou take the hoodie and leave the dungeons, becoming a hero!')
-time.sleep(1)
-print('\nCongrats on beating the game!')
-time.sleep(5)
-print('\n\nCredits:')
-print('\nCreated and programed by Nitin Keswani.')
-print('\nAll rights reserved. Copyright 2025 to Nitin Keswani')
+if player_stats['Health'] > 0:
+    print('\nYou beat the final enemy in the dungeons!')
+    time.sleep(1)
+    print('\nThere is golden light coming from the door ahead of you.')
+    time.sleep(1)
+    print('\nYou go through to door into what seems to be the final room of the dungeons.')
+    time.sleep(1)
+    print('\nOn a pedestal in front of you is the amulet.')
+    time.sleep(1)
+    print('\nYou take it and become a hero!')
+    time.sleep(1)
+    print('\nThanks for playing!')
+    time.sleep(5)
+    print('\n\nCredits:')
+    print('\nCreated and programed by Nitin Keswani.')
+    easter_egg = input('\nAll rights reserved. Copyright 2025 to Nitin Keswani\n ')
+    if easter_egg.lower() == 'easter egg':
+        print("\nBefore you left the amulet's chamber you noticed an engraved stone on the ground.")
+        time.sleep(3)
+        print('\nIt said...')
+        time.sleep(1)
+        print('.')
+        time.sleep(1)
+        print('.')
+        time.sleep(1)
+        print('.')
+        time.sleep(1)
+        print('GOOOOOOOOOOOD BOY!')
