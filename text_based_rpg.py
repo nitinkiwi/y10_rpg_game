@@ -53,7 +53,7 @@ shop_item_costs = {
 }
 ability_list = ['dodge','extra healing','double damage','rebound', 'rizz']
 
-enemy_names_list = ['Mushroom Ma','The GG Master','Grubular','Fish','The Walking Stick','Timothy']
+enemy_names_list = ['Mushroom Ma','The GG Master','Grubular','Fish','The Walking Stick','Timothy','Extra']
 
 enemy_health_list = [100,125,150,175,200,280]
 
@@ -207,7 +207,7 @@ def attack(attacker, attacked):
             time.sleep(1)
             print(f'You still have {player_stats['Health']} health.')
 
-for i in range(0,len(enemy_names_list)+1):
+for i in range(0,len(enemy_names_list)-1):
     print(f'\nYou now enter the next room of the dungeons.\n\nInside is an enemy: {enemy_stats['Name']}!')
     time.sleep(1)
     print(f"\nHere are {enemy_stats['Name']}'s stats:\n")
@@ -252,7 +252,7 @@ for i in range(0,len(enemy_names_list)+1):
         player_stats['Gold'] = player_stats['Gold'] - 50
     elif shop_item == '4' and player_stats['Gold'] >= shop_item_costs[shop_item]:
         print('Your ability has been upgraded.')
-        player_stats['Gold'] = player_stats['Gold'] - 110
+        player_stats['Gold'] = player_stats['Gold'] - ability_upgrades_cost[player_stats['Ability']]
         if player_stats['Ability'] == 'dodge':
             ability_percentages['dodge'] = ability_percentages['dodge'] + 3
         elif player_stats['Ability'] == 'extra healing':
@@ -300,12 +300,13 @@ for i in range(0,len(enemy_names_list)+1):
 
     enemy_level = enemy_level + 1
 
-    enemy_stats = {
-        'Name':enemy_names_list[random_chance(len(enemy_names_list)-1)],
-        'Health':enemy_health_list[enemy_level],
-        'Damage':enemy_damage_list[enemy_level],
-        'Gold reward':enemy_reward_list[enemy_level] 
-    }
+    if enemy_level < 6:
+        enemy_stats = {
+            'Name':enemy_names_list[random_chance(len(enemy_names_list)-1)],
+            'Health':enemy_health_list[enemy_level],
+            'Damage':enemy_damage_list[enemy_level],
+            'Gold reward':enemy_reward_list[enemy_level] 
+        }
 
     del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
 
