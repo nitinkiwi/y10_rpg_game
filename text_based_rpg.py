@@ -8,7 +8,7 @@ ability_percentages = {
     'dodge':20,
     'double damage':10,
     'rebound':10,
-    'rizz':5,
+    'rizz':10,
 }
 
 ability_description = {
@@ -53,7 +53,7 @@ shop_item_costs = {
 }
 ability_list = ['dodge','extra healing','double damage','rebound', 'rizz']
 
-enemy_names_list = ['Mushroom Ma','The GG Master','Grubular','Fish','The Walking Stick','Timothy','Extra']
+enemy_names_list = ['Mushroom Ma','The GG Master','Grubular','Fish','The Walking Stick','Timothy']
 
 enemy_health_list = [100,125,150,175,200,280]
 
@@ -77,13 +77,13 @@ health_multipliers = {
     'human':12,
     'dwarf':8,
     'wizard':12.1,
-    'sigma':20
+    'sigma':13
 }
 damage_multipliers = {
     'human':5,
     'dwarf':8,
     'wizard':6,
-    'sigma':9
+    'sigma':6
 }
 stats_chosen = False
 
@@ -196,6 +196,8 @@ def attack(attacker, attacked):
             time.sleep(1)
             print('Your attack failed!')
             time.sleep(1)
+            if player_stats['Ability'] == 'rizz':
+                ability(player_stats['Ability'])
             print(f'{enemy_stats['Name']} still has {enemy_stats['Health']} health.')
             time.sleep(1)
             print(f'You healed {str(player_stats['Healing'])} health points.')
@@ -207,7 +209,7 @@ def attack(attacker, attacked):
             time.sleep(1)
             print(f'You still have {player_stats['Health']} health.')
 
-for i in range(0,len(enemy_names_list)-1):
+for i in range(0,len(enemy_names_list)):
     print(f'\nYou now enter the next room of the dungeons.\n\nInside is an enemy: {enemy_stats['Name']}!')
     time.sleep(1)
     print(f"\nHere are {enemy_stats['Name']}'s stats:\n")
@@ -278,7 +280,7 @@ for i in range(0,len(enemy_names_list)-1):
     elif shop_item == 'q':
         print('\nYou move past the shop.')
     elif player_stats['Gold'] < shop_item_costs[shop_item]:
-        print("\nYou didn't have enough gold to purchase that item.")
+        print("\nAre you dumb? You didn't have enough gold to purchase that item. You missed your chance to buy an upgrade.")
     else:
         print('That is not a valid item to purchase.')
 
@@ -377,4 +379,4 @@ if player_stats['Health'] > 0:
     
 
 ''')
-    print('\n Never gonna give you up!\nNever gonna let you down!\nNever gonna run around and desert you!')
+    print('\nNever gonna give you up!\nNever gonna let you down!\nNever gonna run around and desert you!')
