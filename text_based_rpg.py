@@ -1,24 +1,12 @@
 import random
 import time
 
+from abilities import ability_description, ability_percentages, ability_upgrades_cost, ability_upgrades, ability_list
+
+from enemy_creation import enemy_damage_list, enemy_health_list, enemy_level, enemy_names_list, enemy_reward_list, enemy_stats
+
 def random_chance(range):
     return random.randint(0,range)
-
-ability_percentages = {
-    'dodge':20,
-    'double damage':10,
-    'rebound':10,
-    'rizz':10,
-}
-
-ability_description = {
-    'dodge':f"This ability gives you a {ability_percentages['dodge']} percent chance every turn to dodge an opponent's attack.",
-    'extra healing':f"This ability lets you heal 5 health more than your base stat.",
-    'double damage':f"This ability gives you a {ability_percentages['double damage']} percent chance every turn of dealing double damage.",
-    'rebound':f"This ability gives you a {ability_percentages['rebound']} percent chance every turn of rebounding an enemy's attack back at them.",
-    'rizz':f'This ability gives you a {ability_percentages['rizz']} percent chance every turn of rizzing up your enemy and winning the battle.',
-    'Your species does not have an ability.':''
-}
 
 player_stats = {
     'Name':'none',
@@ -29,45 +17,12 @@ player_stats = {
     'Gold':0, 
     'Ability':'dodge',
 }
-ability_upgrades_cost = {
-    'dodge':80,
-    'extra healing':200,
-    'double damage':100,
-    'rebound':80,
-    'rizz':110,
-    'Your species does not have an ability.':350
-}
-ability_upgrades = {
-    'dodge':'Increase your chance of dodging an attack by 3 percent.',
-    'extra healing':'Double your healing stat.',
-    'double damage':'Increase the multiplier that double damage does by 0.5.',
-    'rebound':'Increase your chance of rebounding an attack by 2 percent.',
-    'rizz':'Increase your chance of rizzing up your enemy by 2 percent.',
-    'Your species does not have an ability.':'Purchase a random ability.'
-}
+
 shop_item_costs = {
     '1':70,
     '2':50,
     '3':50,
     '4':ability_upgrades_cost[player_stats['Ability']],
-}
-ability_list = ['dodge','extra healing','double damage','rebound', 'rizz']
-
-enemy_names_list = ['Mushroom Ma','The GG Master','Grubular','Fish','The Walking Stick','Timothy']
-
-enemy_health_list = [100,125,150,175,200,280]
-
-enemy_damage_list = [20,30,40,50,70,90]
-
-enemy_reward_list = [50,70,100,150,200,250]
-
-enemy_level = 0
-
-enemy_stats = {
-    'Name':enemy_names_list[random_chance(len(enemy_names_list)-1)],
-    'Health':enemy_health_list[enemy_level],
-    'Damage':enemy_damage_list[enemy_level],
-    'Gold reward':enemy_reward_list[enemy_level],
 }
 
 del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
@@ -266,8 +221,6 @@ for i in range(0,len(enemy_names_list)):
         elif player_stats['Ability'] == 'rizz':
             ability_percentages['rizz'] = ability_percentages['rizz'] + 2
         elif player_stats['Ability'] == 'Your species does not have an ability.':
-            # The extra 240 gold take away is because it cost 350 gold to get an ability and only 110 to upgrade an ability.
-            player_stats['Gold'] = player_stats['Gold'] - 240
             player_stats['Ability'] = ability_list[random_chance(3)]
             if player_stats['Ability'] == 'extra healing':
                 player_stats['Healing'] = player_stats['Healing'] + 5
