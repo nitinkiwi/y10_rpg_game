@@ -6,7 +6,7 @@ enemy_names_list = ['Mushroom Ma','The GG Master','Grubular','Fish','The Walking
 
 enemy_health_list = [100,125,150,175,200,280]
 
-enemy_damage_list = [20,30,40,50,70,90]
+enemy_damage_list = [20,30,40,50,70,80]
 
 enemy_reward_list = [50,70,100,150,200,250]
 
