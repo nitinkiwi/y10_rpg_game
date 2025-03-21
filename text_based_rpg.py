@@ -164,7 +164,7 @@ def attack(attacker, attacked):
             time.sleep(1)
             print(f'You still have {player_stats['Health']} health.')
 
-for i in range(0,len(enemy_names_list)):
+for i in range(0,len(enemy_names_list)+1):
     print(f'\nYou now enter the next room of the dungeons.\n\nInside is an enemy: {enemy_stats['Name']}!')
     time.sleep(1)
     print(f"\nHere are {enemy_stats['Name']}'s stats:\n")
@@ -185,85 +185,98 @@ for i in range(0,len(enemy_names_list)):
         break
     # Getting your gold reward if you won the battle and then entering the shop.
     time.sleep(1)
-    print(f'\nYou earned {str(enemy_stats['Gold reward'])} gold!')
-    time.sleep(2)
-    player_stats['Gold'] = player_stats['Gold'] + enemy_stats['Gold reward']
-    print(f'You have in total {player_stats['Gold']} gold.')
-    time.sleep(1)
-    print("\nYou go into the next room of the dungeons. To your suprise, there is an adventurer's shop there!")
-    time.sleep(2)
-    shop_item = input(f"\nWhich upgrade do you want?\n1. Add 10 to your damage stat. (70 gold)\n2. Add 5 to your healing stat. (50 gold)\n3. Gain 30 health. (50 gold)\n4. Ability upgrade: {ability_upgrades[player_stats['Ability']]} ({ability_upgrades_cost[player_stats['Ability']]} gold)\n\nEnter the number of the upgrade you want or 'q' if you do not want an upgrade: ")
-    time.sleep(1)
-    if shop_item == '1' and player_stats['Gold'] >= shop_item_costs[shop_item]:
-        # These conditionals are checking firstly which item you have chosen and then if the amount of gold you have 'player_stats['Gold]' is more or equal to the cost of the item you have selected 'shop_item_costs[shop_item]'
-        player_stats['Damage'] = player_stats['Damage'] + 10
-        print('\nYour damage has been upgraded.')
-        player_stats['Gold'] = player_stats['Gold'] - 70
-    elif shop_item == '2' and player_stats['Gold'] >= shop_item_costs[shop_item]:
-        player_stats['Healing'] = player_stats['Healing'] + 5
-        print('\nYour healing has been upgraded.')
-        player_stats['Gold'] = player_stats['Gold'] - 50
-    elif shop_item == '3' and player_stats['Gold'] >= shop_item_costs[shop_item]:
-        player_stats['Health'] = player_stats['Health'] + 30
-        print('\nYour health has been upgraded.')
-        player_stats['Gold'] = player_stats['Gold'] - 50
-    elif shop_item == '4' and player_stats['Gold'] >= shop_item_costs[shop_item]:
-        print('Your ability has been upgraded.')
-        player_stats['Gold'] = player_stats['Gold'] - ability_upgrades_cost[player_stats['Ability']]
-        if player_stats['Ability'] == 'dodge':
-            ability_percentages['dodge'] = ability_percentages['dodge'] + 3
-        elif player_stats['Ability'] == 'extra healing':
-            player_stats['Healing'] = player_stats['Healing'] * 2
-        elif player_stats['Ability'] == 'double damage':
-            double_damage_multiplier = double_damage_multiplier + 0.5
-        elif player_stats['Ability'] == 'rebound':
-            ability_percentages['rebound'] = ability_percentages['rebound'] + 2
-        elif player_stats['Ability'] == 'rizz':
-            ability_percentages['rizz'] = ability_percentages['rizz'] + 2
-        elif player_stats['Ability'] == 'Your species does not have an ability.':
-            player_stats['Ability'] = ability_list[random_chance(3)]
-            if player_stats['Ability'] == 'extra healing':
-                player_stats['Healing'] = player_stats['Healing'] + 5
-            print(f'Your new ability is {player_stats['Ability']}.')
-            time.sleep(2)
-            print(ability_description[player_stats['Ability']])
-            time.sleep(2)
+    if enemy_level < 5:
+        print(f'\nYou earned {str(enemy_stats['Gold reward'])} gold!')
+        time.sleep(2)
+        player_stats['Gold'] = player_stats['Gold'] + enemy_stats['Gold reward']
+        print(f'You have in total {player_stats['Gold']} gold.')
+        time.sleep(1)
+        print("\nYou go into the next room of the dungeons. To your suprise, there is an adventurer's shop there!")
+        time.sleep(2)
+        shop_item = input(f"\nWhich upgrade do you want?\n1. Add 10 to your damage stat. (70 gold)\n2. Add 5 to your healing stat. (50 gold)\n3. Gain 30 health. (50 gold)\n4. Ability upgrade: {ability_upgrades[player_stats['Ability']]} ({ability_upgrades_cost[player_stats['Ability']]} gold)\n\nEnter the number of the upgrade you want or 'q' if you do not want an upgrade: ")
+        time.sleep(1)
+        if shop_item == '1' and player_stats['Gold'] >= shop_item_costs[shop_item]:
+            # These conditionals are checking firstly which item you have chosen and then if the amount of gold you have 'player_stats['Gold]' is more or equal to the cost of the item you have selected 'shop_item_costs[shop_item]'
+            player_stats['Damage'] = player_stats['Damage'] + 10
+            print('\nYour damage has been upgraded.')
+            player_stats['Gold'] = player_stats['Gold'] - 70
+        elif shop_item == '2' and player_stats['Gold'] >= shop_item_costs[shop_item]:
+            player_stats['Healing'] = player_stats['Healing'] + 5
+            print('\nYour healing has been upgraded.')
+            player_stats['Gold'] = player_stats['Gold'] - 50
+        elif shop_item == '3' and player_stats['Gold'] >= shop_item_costs[shop_item]:
+            player_stats['Health'] = player_stats['Health'] + 30
+            print('\nYour health has been upgraded.')
+            player_stats['Gold'] = player_stats['Gold'] - 50
+        elif shop_item == '4' and player_stats['Gold'] >= shop_item_costs[shop_item]:
+            print('Your ability has been upgraded.')
+            player_stats['Gold'] = player_stats['Gold'] - ability_upgrades_cost[player_stats['Ability']]
+            if player_stats['Ability'] == 'dodge':
+                ability_percentages['dodge'] = ability_percentages['dodge'] + 3
+            elif player_stats['Ability'] == 'extra healing':
+                player_stats['Healing'] = player_stats['Healing'] * 2
+            elif player_stats['Ability'] == 'double damage':
+                double_damage_multiplier = double_damage_multiplier + 0.5
+            elif player_stats['Ability'] == 'rebound':
+                ability_percentages['rebound'] = ability_percentages['rebound'] + 2
+            elif player_stats['Ability'] == 'rizz':
+                ability_percentages['rizz'] = ability_percentages['rizz'] + 2
+            elif player_stats['Ability'] == 'Your species does not have an ability.':
+                player_stats['Ability'] = ability_list[random_chance(3)]
+                if player_stats['Ability'] == 'extra healing':
+                    player_stats['Healing'] = player_stats['Healing'] + 5
+                print(f'Your new ability is {player_stats['Ability']}.')
+                time.sleep(2)
+                print(ability_description[player_stats['Ability']])
+                time.sleep(2)
+            else:
+                print('Your species does not have an ability so for you this upgrade is not valid.')
+        elif shop_item == 'q':
+            print('\nYou move past the shop.')
+        elif player_stats['Gold'] < shop_item_costs[shop_item]:
+            print("\nAre you dumb? You didn't have enough gold to purchase that item. You missed your chance to buy an upgrade.")
         else:
-            print('Your species does not have an ability so for you this upgrade is not valid.')
-    elif shop_item == 'q':
-        print('\nYou move past the shop.')
-    elif player_stats['Gold'] < shop_item_costs[shop_item]:
-        print("\nAre you dumb? You didn't have enough gold to purchase that item. You missed your chance to buy an upgrade.")
-    else:
-        print('That is not a valid item to purchase.')
+            print('That is not a valid item to purchase.')
 
-    ability_description = {
-        'dodge':f"This ability gives you a {ability_percentages['dodge']} percent chance every turn to dodge an opponent's attack.",
-        'extra healing':f"This ability lets you heal 5 health more than your base stat.",
-        'double damage':f"This ability gives you a {ability_percentages['double damage']} percent chance every turn of dealing double damage.",
-        'rebound':f"This ability gives you a {ability_percentages['rebound']} percent chance every turn of rebounding an enemy's attack back at them.",
-        'rizz':f'This ability gives you a {ability_percentages['rizz']} percent chance every turn of rizzing up your enemy and winning the battle.',
-        'Your species does not have an ability.':''
-    }
-    # Representing stats after upgrades and the battle.
-    time.sleep(1)
-    print('\nHere are your stats after your battle:\n')
-    time.sleep(1)
-    print('\n'.join("{}: {}".format(k, v) for k, v in player_stats.items()))
-    print(ability_description[player_stats['Ability']])
-    input('(Press enter to continue) ')
-
-    enemy_level = enemy_level + 1
-
-    if enemy_level < 6:
-        enemy_stats = {
-            'Name':enemy_names_list[random_chance(len(enemy_names_list)-1)],
-            'Health':enemy_health_list[enemy_level],
-            'Damage':enemy_damage_list[enemy_level],
-            'Gold reward':enemy_reward_list[enemy_level] 
+        ability_description = {
+            'dodge':f"This ability gives you a {ability_percentages['dodge']} percent chance every turn to dodge an opponent's attack.",
+            'extra healing':f"This ability lets you heal 5 health more than your base stat.",
+            'double damage':f"This ability gives you a {ability_percentages['double damage']} percent chance every turn of dealing double damage.",
+            'rebound':f"This ability gives you a {ability_percentages['rebound']} percent chance every turn of rebounding an enemy's attack back at them.",
+            'rizz':f'This ability gives you a {ability_percentages['rizz']} percent chance every turn of rizzing up your enemy and winning the battle.',
+            'Your species does not have an ability.':''
         }
+        # Representing stats after upgrades and the battle.
+        time.sleep(1)
+        print('\nHere are your stats after your battle:\n')
+        time.sleep(1)
+        print('\n'.join("{}: {}".format(k, v) for k, v in player_stats.items()))
+        print(ability_description[player_stats['Ability']])
+        input('(Press enter to continue) ')
 
-    del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
+
+
+        enemy_level = enemy_level + 1
+
+        if enemy_level < 6:
+            enemy_stats = {
+                'Name':enemy_names_list[random_chance(len(enemy_names_list)-1)],
+                'Health':enemy_health_list[enemy_level],
+                'Damage':enemy_damage_list[enemy_level],
+                'Gold reward':enemy_reward_list[enemy_level] 
+            }
+
+        del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
+
+        time.sleep(1)
+
+        input(f'There are {random.randint(1,5)} doors in front of you. Which one do you go through? (Enter a number) ')
+        time.sleep(1)
+
+        if random_chance(2) == 0:
+            print('Good choice! The other doors lead to death...')
+        else:
+            print('Be careful! The door you chose will take you down a dangerous path...')
 
 if player_stats['Health'] > 0:
     print('\nYou beat the final enemy in the dungeons!')
