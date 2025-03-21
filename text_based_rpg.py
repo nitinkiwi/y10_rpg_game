@@ -270,13 +270,15 @@ for i in range(0,len(enemy_names_list)+1):
 
         time.sleep(1)
 
-        input(f'There are {random.randint(1,5)} doors in front of you. Which one do you go through? (Enter a number) ')
+        input(f'\nThere are {random.randint(1,5)} doors in front of you. Which one do you go through? (Enter a number) ')
         time.sleep(1)
-
-        if random_chance(2) == 0:
+        choice = random_chance(2)
+        if choice == 0:
             print('Good choice! The other doors lead to death...')
+            time.sleep(3)
         else:
             print('Be careful! The door you chose will take you down a dangerous path...')
+            time.sleep(3)
 
 if player_stats['Health'] > 0:
     print('\nYou beat the final enemy in the dungeons!')
