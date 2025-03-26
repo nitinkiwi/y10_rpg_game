@@ -3,47 +3,16 @@ import time
 
 from abilities import ability_description, ability_percentages, ability_upgrades_cost, ability_upgrades, ability_list
 
+from character_creation import player_stats, species, health_multipliers, damage_multipliers, double_damage_multiplier
+
 from enemy_creation import enemy_damage_list, enemy_health_list, enemy_level, enemy_names_list, enemy_reward_list, enemy_stats
+
+from shop_mechanics import shop_item, shop_item_costs
 
 def random_chance(range):
     return random.randint(0,range)
 
-shop_item = 'not chosen'
-player_stats = {
-    'Name':'none',
-    'Species':'none',
-    'Health':10,
-    'Damage':10,
-    'Healing':10,
-    'Gold':0, 
-    'Ability':'dodge',
-}
-
-shop_item_costs = {
-    '1':70,
-    '2':50,
-    '3':50,
-    '4':ability_upgrades_cost[player_stats['Ability']],
-}
-
 del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
-
-species = ['human', 'dwarf','wizard', 'sigma']
-health_multipliers = {
-    'human':12,
-    'dwarf':8,
-    'wizard':12.1,
-    'sigma':13
-}
-damage_multipliers = {
-    'human':5,
-    'dwarf':8,
-    'wizard':6,
-    'sigma':6
-}
-stats_chosen = False
-
-double_damage_multiplier = 2
 
 # Intro
 print('Welcome adventurer! Before you lies the entrance to the dungeons.')
@@ -132,7 +101,7 @@ def attack(attacker, attacked):
             print(f'{attacked['Name']} now has {attacked['Health']} health.')
             time.sleep(1)
             print(f'You also healed {str(player_stats['Healing'])} health points.')
-            time.sleep(1)
+            time.sleep(2.5)
             player_stats['Health'] = player_stats['Health'] + player_stats['Healing']
             if enemy_stats['Health'] <= 0:
                 print(f'You vanquished {enemy_stats['Name']}!')
@@ -167,7 +136,7 @@ def attack(attacker, attacked):
 
 for i in range(0,len(enemy_names_list)+1):
     print(f'\nYou now enter the next room of the dungeons.\n\nInside is an enemy: {enemy_stats['Name']}!')
-    time.sleep(1)
+    time.sleep(2)
     print(f"\nHere are {enemy_stats['Name']}'s stats:\n")
     print('\n'.join("{}: {}".format(k, v) for k, v in enemy_stats.items()))
     input('\n(Press enter to continue) ')
@@ -193,8 +162,8 @@ for i in range(0,len(enemy_names_list)+1):
         print(f'You have in total {player_stats['Gold']} gold.')
         time.sleep(1)
         print("\nYou go into the next room of the dungeons. To your suprise, there is an adventurer's shop there!")
-        while shop_item != 'q':
-            time.sleep(2)
+        while shop_item != 'no':
+            time.sleep(1)
             shop_item = input(f"\nWhich upgrade do you want?\n1. Add 10 to your damage stat. (70 gold)\n2. Add 5 to your healing stat. (50 gold)\n3. Gain 30 health. (50 gold)\n4. Ability upgrade: {ability_upgrades[player_stats['Ability']]} ({ability_upgrades_cost[player_stats['Ability']]} gold)\n\nEnter the number of the upgrade you want or 'q' if you do not want an upgrade: ")
             time.sleep(1)
             if shop_item == '1' and player_stats['Gold'] >= shop_item_costs[shop_item]:
@@ -255,10 +224,13 @@ for i in range(0,len(enemy_names_list)+1):
             print('\n'.join("{}: {}".format(k, v) for k, v in player_stats.items()))
             print(ability_description[player_stats['Ability']])
             input('(Press enter to continue) ')
-
-
+            shop_item = input('\nWould you like to buy another item from the shop? (yes/no) ')
 
         enemy_level = enemy_level + 1
+        
+        shop_item = 'not chosen'
+
+        print('\nYou move away from the shop. ')
 
         if enemy_level < 6:
             enemy_stats = {
@@ -272,7 +244,7 @@ for i in range(0,len(enemy_names_list)+1):
 
         time.sleep(1)
 
-        input(f'\nThere are {random.randint(1,5)} doors in front of you. Which one do you go through? (Enter a number) ')
+        input(f'\nThere are {random.randint(2,8)} doors in front of you. Which one do you go through? (Enter a number) ')
         time.sleep(1)
         choice = random_chance(2)
         if choice == 0:
