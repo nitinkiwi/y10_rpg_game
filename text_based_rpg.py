@@ -14,6 +14,18 @@ def random_chance(range):
 
 del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
 
+def question_checker(question, answer):
+    user_input = 'none given'
+    while user_input not in answer:
+        user_input = input(question)
+        if user_input in answer:
+            break
+        else:
+            print('\nPlease enter a provided option.')
+    return user_input
+
+game_mode = question_checker('Do you want to play in infinite mode or story mode? (infinite mode/story mode) ',['infinite mode', 'story mode'])
+
 # Intro
 print('Welcome adventurer! Before you lies the entrance to the dungeons.')
 time.sleep(0.2)
@@ -42,7 +54,7 @@ def choose_stats(species):
         # Sigmas always get the 'rizz' ability.
         player_stats['Ability'] = 'rizz'
 
-player_stats['Species'] = input('What species would you like to be? (human/dwarf/wizard/sigma) ')
+player_stats['Species'] = question_checker('What species would you like to be? (human/dwarf/wizard/sigma) ',['human', 'dwarf', 'wizard', 'sigma'])
 time.sleep(0.2)
 
 choose_stats(player_stats['Species'])
@@ -149,10 +161,15 @@ for i in range(0,len(enemy_names_list)+1):
         if enemy_stats['Health'] < 1:
             break
         attack(enemy_stats,player_stats)
-        if player_stats['Health'] < 1:
+        if player_stats['Health'] <= 0:
             break
     if player_stats['Health'] < 1:
-        break
+        if game_mode == 'infinite mode':
+            print('\nYou killed X enemies and got a score of XYZ.')
+            print('\nYou are nth on the leaderboard.')
+            break
+        else:
+            break
     # Getting your gold reward if you won the battle and then entering the shop.
     time.sleep(1)
     if enemy_level < 5:
@@ -164,7 +181,7 @@ for i in range(0,len(enemy_names_list)+1):
         print("\nYou go into the next room of the dungeons. To your suprise, there is an adventurer's shop there!")
         while shop_item != 'no':
             time.sleep(1)
-            shop_item = input(f"\nWhich upgrade do you want?\n1. Add 10 to your damage stat. (70 gold)\n2. Add 5 to your healing stat. (50 gold)\n3. Gain 30 health. (50 gold)\n4. Ability upgrade: {ability_upgrades[player_stats['Ability']]} ({ability_upgrades_cost[player_stats['Ability']]} gold)\n\nEnter the number of the upgrade you want or 'q' if you do not want an upgrade: ")
+            shop_item = question_checker(f"\nWhich upgrade do you want?\n1. Add 10 to your damage stat. (70 gold)\n2. Add 5 to your healing stat. (50 gold)\n3. Gain 30 health. (50 gold)\n4. Ability upgrade: {ability_upgrades[player_stats['Ability']]} ({ability_upgrades_cost[player_stats['Ability']]} gold)\n\nEnter the number of the upgrade you want or 'q' if you do not want an upgrade: ", ['1','2','3','4','q'])
             time.sleep(1)
             if shop_item == '1' and player_stats['Gold'] >= shop_item_costs[shop_item]:
                 # These conditionals are checking firstly which item you have chosen and then if the amount of gold you have 'player_stats['Gold]' is more or equal to the cost of the item you have selected 'shop_item_costs[shop_item]'
@@ -199,13 +216,15 @@ for i in range(0,len(enemy_names_list)+1):
                     print(f'Your new ability is {player_stats['Ability']}.')
                     time.sleep(2)
                     print(ability_description[player_stats['Ability']])
-                    time.sleep(2)
+                    time.sleep(2) 
                 else:
                     print('Your species does not have an ability so for you this upgrade is not valid.')
             elif shop_item == 'q':
                 print('\nYou move past the shop.')
             elif player_stats['Gold'] < shop_item_costs[shop_item]:
                 print("\nYou don't have enough gold to purchase that item.")
+            elif shop_item == '':
+                print('That is not a valid item to purchase.')
             else:
                 print('That is not a valid item to purchase.')
 
@@ -224,7 +243,7 @@ for i in range(0,len(enemy_names_list)+1):
             print('\n'.join("{}: {}".format(k, v) for k, v in player_stats.items()))
             print(ability_description[player_stats['Ability']])
             input('(Press enter to continue) ')
-            shop_item = input('\nWould you like to buy another item from the shop? (yes/no) ')
+            shop_item = question_checker('\nWould you like to buy another item from the shop? (yes/no) ', ['yes','no'])
 
         enemy_level = enemy_level + 1
         
@@ -244,7 +263,9 @@ for i in range(0,len(enemy_names_list)+1):
 
         time.sleep(1)
 
-        input(f'\nThere are {random.randint(2,8)} doors in front of you. Which one do you go through? (Enter a number) ')
+        doors = random.randint(2,8)
+
+        question_checker(f'\nThere are {doors} doors in front of you. Which one do you go through? (Enter a number) ',[str(doors)])
         time.sleep(1)
         choice = random_chance(2)
         if choice == 0:
