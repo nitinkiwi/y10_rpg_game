@@ -3,14 +3,11 @@ import time
 
 from abilities import ability_description, ability_percentages, ability_upgrades_cost, ability_upgrades, ability_list
 
-from character_creation import player_stats, species, health_multipliers, damage_multipliers, double_damage_multiplier
+from character_creation import player_stats, double_damage_multiplier, random_chance, choose_stats
 
 from enemy_creation import enemy_damage_list, enemy_health_list, enemy_level, enemy_names_list, enemy_reward_list, enemy_stats
 
 from shop_mechanics import shop_item, shop_item_costs
-
-def random_chance(range):
-    return random.randint(0,range)
 
 del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
 
@@ -24,7 +21,22 @@ def question_checker(question, answer):
             print('\nPlease enter a provided option.')
     return user_input
 
-game_mode = question_checker('Do you want to play in infinite mode or story mode? (infinite mode/story mode) ',['infinite mode', 'story mode'])
+leaderboard = {
+    1:'none',
+    2:'none',
+    3:'none',
+    4:'none',
+    5:'none',
+    6:'none',
+    7:'none',
+    8:'none',
+    9:'none',
+    10:'none',
+}
+
+continuing = True
+
+game_mode = question_checker('\nDo you want to play in infinite mode or story mode? (infinite mode/story mode) ',['infinite mode', 'story mode'])
 
 # Intro
 print('Welcome adventurer! Before you lies the entrance to the dungeons.')
@@ -37,22 +49,6 @@ player_stats['Name'] = input('If it is the amulet you seek, you are brave for co
 time.sleep(0.5)
 print(f'Welcome to the dungeons {player_stats['Name'].title()}!')
 time.sleep(0.2)
-
-def choose_stats(species):
-    # The next two lines multiply your original health and damage stat by your species multiplier.
-    player_stats['Health'] = player_stats['Health'] * health_multipliers[species]
-    player_stats['Damage'] = player_stats['Damage'] * damage_multipliers[species]
-    if species == 'human' or species == 'wizard':
-        # Selecting a random ability if your species can have an ability at the start of the game.
-        player_stats['Ability'] = ability_list[random_chance(3)]
-        if player_stats['Ability'] == ability_list[1]:
-            # Adding the 5 healing bonus for the extra healing ability.
-            player_stats['Healing'] = player_stats['Healing'] + 5
-    elif species == 'dwarf':
-        player_stats['Ability'] = 'Your species does not have an ability.'
-    else:
-        # Sigmas always get the 'rizz' ability.
-        player_stats['Ability'] = 'rizz'
 
 player_stats['Species'] = question_checker('What species would you like to be? (human/dwarf/wizard/sigma) ',['human', 'dwarf', 'wizard', 'sigma'])
 time.sleep(0.2)
@@ -113,7 +109,7 @@ def attack(attacker, attacked):
             print(f'{attacked['Name']} now has {attacked['Health']} health.')
             time.sleep(1)
             print(f'You also healed {str(player_stats['Healing'])} health points.')
-            time.sleep(2.5)
+            time.sleep(1.5)
             player_stats['Health'] = player_stats['Health'] + player_stats['Healing']
             if enemy_stats['Health'] <= 0:
                 print(f'You vanquished {enemy_stats['Name']}!')
@@ -146,7 +142,7 @@ def attack(attacker, attacked):
             time.sleep(1)
             print(f'You still have {player_stats['Health']} health.')
 
-for i in range(0,len(enemy_names_list)+1):
+while continuing == True:
     print(f'\nYou now enter the next room of the dungeons.\n\nInside is an enemy: {enemy_stats['Name']}!')
     time.sleep(2)
     print(f"\nHere are {enemy_stats['Name']}'s stats:\n")
@@ -167,18 +163,21 @@ for i in range(0,len(enemy_names_list)+1):
         if game_mode == 'infinite mode':
             print('\nYou killed X enemies and got a score of XYZ.')
             print('\nYou are nth on the leaderboard.')
+            print('\n'.join("{}: {}".format(k, v) for k, v in leaderboard.items()))
+
             break
         else:
             break
     # Getting your gold reward if you won the battle and then entering the shop.
     time.sleep(1)
-    if enemy_level < 5:
+    if enemy_level < 5 and game_mode == 'story mode' or game_mode == 'infinite mode':
         print(f'\nYou earned {str(enemy_stats['Gold reward'])} gold!')
         time.sleep(2)
         player_stats['Gold'] = player_stats['Gold'] + enemy_stats['Gold reward']
         print(f'You have in total {player_stats['Gold']} gold.')
         time.sleep(1)
         print("\nYou go into the next room of the dungeons. To your suprise, there is an adventurer's shop there!")
+
         while shop_item != 'no':
             time.sleep(1)
             shop_item = question_checker(f"\nWhich upgrade do you want?\n1. Add 10 to your damage stat. (70 gold)\n2. Add 5 to your healing stat. (50 gold)\n3. Gain 30 health. (50 gold)\n4. Ability upgrade: {ability_upgrades[player_stats['Ability']]} ({ability_upgrades_cost[player_stats['Ability']]} gold)\n\nEnter the number of the upgrade you want or 'q' if you do not want an upgrade: ", ['1','2','3','4','q'])
@@ -245,27 +244,19 @@ for i in range(0,len(enemy_names_list)+1):
             input('(Press enter to continue) ')
             shop_item = question_checker('\nWould you like to buy another item from the shop? (yes/no) ', ['yes','no'])
 
-        enemy_level = enemy_level + 1
         
         shop_item = 'not chosen'
 
         print('\nYou move away from the shop. ')
 
-        if enemy_level < 6:
-            enemy_stats = {
-                'Name':enemy_names_list[random_chance(len(enemy_names_list)-1)],
-                'Health':enemy_health_list[enemy_level],
-                'Damage':enemy_damage_list[enemy_level],
-                'Gold reward':enemy_reward_list[enemy_level] 
-            }
-
-        del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
-
         time.sleep(1)
 
-        doors = random.randint(2,8)
+        doors = ['1']
 
-        question_checker(f'\nThere are {doors} doors in front of you. Which one do you go through? (Enter a number) ',[str(doors)])
+        for i in range(2, random.randint(3,8)):
+            doors.append(str(i))
+
+        question_checker(f'\nThere are {max(doors)} doors in front of you. Which one do you go through? (Enter a number) ',doors)
         time.sleep(1)
         choice = random_chance(2)
         if choice == 0:
@@ -275,7 +266,22 @@ for i in range(0,len(enemy_names_list)+1):
             print('Be careful! The door you chose will take you down a dangerous path...')
             time.sleep(3)
 
-if player_stats['Health'] > 0:
+    enemy_level = enemy_level + 1
+
+    if enemy_level < 6 and game_mode == 'story mode' or game_mode == 'infinite mode':
+            enemy_stats = {
+                'Name':enemy_names_list[random_chance(len(enemy_names_list)-1)],
+                'Health':enemy_health_list[enemy_level],
+                'Damage':enemy_damage_list[enemy_level],
+                'Gold reward':enemy_reward_list[enemy_level] 
+            }
+
+    del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
+
+    if enemy_level == 6:
+        continuing == False
+
+if player_stats['Health'] > 0 and game_mode == 'story mode':
     print('\nYou beat the final enemy in the dungeons!')
     time.sleep(1)
     print('\nThere is golden light coming from the door ahead of you.')
