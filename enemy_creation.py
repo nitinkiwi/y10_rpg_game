@@ -23,5 +23,9 @@ adjectives = ['pretty', 'slimy', 'ugly', 'small', 'large', 'excellent', 'master'
 
 nouns = ['baiter', 'slime', 'avocado', 'zombie', 'panda', 'snake', 'mushroom', 'chicken', 'baby', 'bird', 'sandworm', 'nit', 'mosquito', 'alien']
 
-print(len(adjectives))
-print(len(nouns))
+def enemy_name_generator(adjectives, nouns):
+    enemy_name = f'{adjectives[random_chance(len(adjectives)-1)]} {nouns[random_chance(len(nouns)-1)]}'
+    return enemy_name
+
+for i in range(0,100):
+    print(enemy_name_generator(adjectives, nouns))
