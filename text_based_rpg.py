@@ -1,3 +1,4 @@
+import json
 import random
 import time
 
@@ -8,6 +9,23 @@ from character_creation import player_stats, double_damage_multiplier, random_ch
 from enemy_creation import enemy_damage_list, enemy_health_list, enemy_level, enemy_names_list, enemy_reward_list, enemy_stats
 
 from shop_mechanics import shop_item, shop_item_costs
+
+high_scores = {
+    1:'none',
+    2:'none',
+    3:'none',
+    4:'none',
+    5:'none',
+    6:'none',
+    7:'none',
+    8:'none',
+    9:'none',
+    10:'none',
+}
+
+# Write the PC to a json file
+with open('high_scores.json', 'w') as f:
+    json.dump(high_scores, f)
 
 del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
 
@@ -20,19 +38,6 @@ def question_checker(question, answer):
         else:
             print('\nPlease enter a provided option.')
     return user_input
-
-leaderboard = {
-    1:'none',
-    2:'none',
-    3:'none',
-    4:'none',
-    5:'none',
-    6:'none',
-    7:'none',
-    8:'none',
-    9:'none',
-    10:'none',
-}
 
 continuing = True
 
@@ -74,7 +79,7 @@ def ability(player_ability):
     if player_ability == 'double damage':
         if random_chance(100) <= ability_percentages['double damage']:
             enemy_stats['Health'] = (enemy_stats['Health'] + player_stats['Damage']) - player_stats['Damage'] * double_damage_multiplier
-            print(f'Your ability activated and you did an extra {player_stats['Damage']} damage!')
+            print(f'Your ability activated and you did an extra {player_stats['Damage']*double_damage_multiplier} damage!')
             time.sleep(2)
     if player_ability == 'rebound':
         if random_chance(100) <= ability_percentages['rebound']:
@@ -163,7 +168,7 @@ while continuing == True:
         if game_mode == 'infinite mode':
             print('\nYou killed X enemies and got a score of XYZ.')
             print('\nYou are nth on the leaderboard.')
-            print('\n'.join("{}: {}".format(k, v) for k, v in leaderboard.items()))
+            print('\n'.join("{}: {}".format(k, v) for k, v in high_scores.items()))
 
             break
         else:
