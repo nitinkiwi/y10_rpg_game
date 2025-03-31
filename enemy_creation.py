@@ -18,3 +18,10 @@ enemy_stats = {
     'Damage':enemy_damage_list[enemy_level],
     'Gold reward':enemy_reward_list[enemy_level],
 }
+
+adjectives = ['pretty', 'slimy', 'ugly', 'small', 'large', 'excellent', 'master', 'crazy', 'undead', 'young', 'old', 'splendid', 'stupid', 'bloated']
+
+nouns = ['baiter', 'slime', 'avocado', 'zombie', 'panda', 'snake', 'mushroom', 'chicken', 'baby', 'bird', 'sandworm', 'nit', 'mosquito', 'alien']
+
+print(len(adjectives))
+print(len(nouns))
