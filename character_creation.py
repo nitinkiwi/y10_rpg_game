@@ -1,8 +1,8 @@
 from abilities import ability_list
 import random
 
-def random_chance(range):
-    return random.randint(0,range)
+def random_chance(start, range):
+    return random.randint(start,range)
 
 player_stats = {
     'Name':'none',
@@ -36,7 +36,7 @@ def choose_stats(species):
     player_stats['Damage'] = player_stats['Damage'] * damage_multipliers[species]
     if species == 'human' or species == 'wizard':
         # Selecting a random ability if your species can have an ability at the start of the game.
-        player_stats['Ability'] = ability_list[random_chance(3)]
+        player_stats['Ability'] = ability_list[random_chance(0, 3)]
         if player_stats['Ability'] == ability_list[1]:
             # Adding the 5 healing bonus for the extra healing ability.
             player_stats['Healing'] = player_stats['Healing'] + 5
