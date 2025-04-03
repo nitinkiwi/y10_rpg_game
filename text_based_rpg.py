@@ -6,11 +6,11 @@ from abilities import ability_description, ability_percentages, ability_upgrades
 
 from character_creation import player_stats, double_damage_multiplier, random_chance, choose_stats
 
-from enemy_creation import enemy_damage_list, enemy_health_list, enemy_level, enemy_names_list, enemy_reward_list, enemy_stats
+from enemy_creation import enemy_damage_list, enemy_health_list, enemy_level, enemy_names_list, enemy_reward_list, enemy_stats, adjectives, nouns, enemy_name_generator
 
 from shop_mechanics import shop_item, shop_item_costs
 
-high_scores = {
+leaderboard = {
     1:'none',
     2:'none',
     3:'none',
@@ -23,11 +23,27 @@ high_scores = {
     10:'none',
 }
 
+high_scores = {
+    1:0,
+    2:0,
+    3:0,
+    4:0,
+    5:0,
+    6:0,
+    7:0,
+    8:0,
+    9:0,
+    10:0,
+}
+
+json_file_dict = {
+    'leaderboard':leaderboard,
+    'high scores':high_scores,
+}
+
 # Write the PC to a json file
 with open('high_scores.json', 'w') as f:
-    json.dump(high_scores, f)
-
-del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
+    json.dump(json_file_dict, f)
 
 def question_checker(question, answer):
     user_input = 'none given'
@@ -72,23 +88,23 @@ time.sleep(0.2)
 
 def ability(player_ability):
     if player_ability == 'dodge':
-        if random_chance(100) <= ability_percentages['dodge']:
+        if random_chance(0, 100) <= ability_percentages['dodge']:
             player_stats['Health'] = player_stats['Health'] + enemy_stats['Damage']
             print('But you dodged the attack! You lost no health.')
             time.sleep(2)
     if player_ability == 'double damage':
-        if random_chance(100) <= ability_percentages['double damage']:
+        if random_chance(0, 100) <= ability_percentages['double damage']:
             enemy_stats['Health'] = (enemy_stats['Health'] + player_stats['Damage']) - player_stats['Damage'] * double_damage_multiplier
             print(f'Your ability activated and you did an extra {player_stats['Damage']*double_damage_multiplier} damage!')
             time.sleep(2)
     if player_ability == 'rebound':
-        if random_chance(100) <= ability_percentages['rebound']:
+        if random_chance(0, 100) <= ability_percentages['rebound']:
             enemy_stats['Health'] = enemy_stats['Health'] - enemy_stats['Damage']
             player_stats['Health'] = player_stats['Health'] + enemy_stats['Damage']
             print(f'But your ability rebounded the attack!\n{enemy_stats['Name']} took {enemy_stats['Damage']} damage and has {enemy_stats['Health']} health!')
             time.sleep(2)
     if player_ability == 'rizz':
-        if random_chance(100) <= ability_percentages['rizz']:
+        if random_chance(0, 100) <= ability_percentages['rizz']:
             enemy_stats['Health'] = 0
             print('Your ability activated and you rizzed up your enemy, winning the battle!')
             time.sleep(2)
@@ -102,7 +118,7 @@ def attack(attacker, attacked):
         time.sleep(1)
         print(f'\n{attacker['Name']} attacks!')
     # There is a two thirds chance that the number will be below 2, so therefore a two thirds chance of an attack being successful.
-    if random_chance(2) < 2:
+    if random_chance(0, 2) < 2:
         # Changing health stats and then there is a lot of narration.
         attacked['Health'] = attacked['Health'] - attacker['Damage']
         if attacker['Name'] == player_stats['Name']:
@@ -166,7 +182,7 @@ while continuing == True:
             break
     if player_stats['Health'] < 1:
         if game_mode == 'infinite mode':
-            print('\nYou killed X enemies and got a score of XYZ.')
+            print(f'\nYou killed {enemy_level} enemies and got a score of XYZ.')
             print('\nYou are nth on the leaderboard.')
             print('\n'.join("{}: {}".format(k, v) for k, v in high_scores.items()))
 
@@ -214,7 +230,7 @@ while continuing == True:
                 elif player_stats['Ability'] == 'rizz':
                     ability_percentages['rizz'] = ability_percentages['rizz'] + 2
                 elif player_stats['Ability'] == 'Your species does not have an ability.':
-                    player_stats['Ability'] = ability_list[random_chance(3)]
+                    player_stats['Ability'] = ability_list[random_chance(0, 3)]
                     if player_stats['Ability'] == 'extra healing':
                         player_stats['Healing'] = player_stats['Healing'] + 5
                     print(f'Your new ability is {player_stats['Ability']}.')
@@ -263,7 +279,7 @@ while continuing == True:
 
         question_checker(f'\nThere are {max(doors)} doors in front of you. Which one do you go through? (Enter a number) ',doors)
         time.sleep(1)
-        choice = random_chance(2)
+        choice = random_chance(0, 2)
         if choice == 0:
             print('Good choice! The other doors lead to death...')
             time.sleep(3)
@@ -273,18 +289,29 @@ while continuing == True:
 
     enemy_level = enemy_level + 1
 
-    if enemy_level < 6 and game_mode == 'story mode' or game_mode == 'infinite mode':
+    if enemy_level < 6 and game_mode == 'story mode':
             enemy_stats = {
-                'Name':enemy_names_list[random_chance(len(enemy_names_list)-1)],
+                'Name':enemy_name_generator(),
                 'Health':enemy_health_list[enemy_level],
                 'Damage':enemy_damage_list[enemy_level],
                 'Gold reward':enemy_reward_list[enemy_level] 
             }
-
-    del enemy_names_list[enemy_names_list.index(enemy_stats['Name'])]
-
-    if enemy_level == 6:
-        continuing == False
+    elif enemy_level < 6 and game_mode == 'infinite mode':
+        enemy_stats = {
+                'Name':enemy_name_generator(),
+                'Health':enemy_health_list[enemy_level],
+                'Damage':enemy_damage_list[enemy_level],
+                'Gold reward':enemy_reward_list[enemy_level] 
+            }
+    elif game_mode == 'infinite mode' and enemy_level >= 6:
+        enemy_stats = {
+            'Name':enemy_name_generator(),
+            'Health':random_chance(150, 250),
+            'Damage':random_chance(90, 120),
+            'Gold reward':random_chance(10, 50) 
+        }
+    else:
+        continuing = False
 
 if player_stats['Health'] > 0 and game_mode == 'story mode':
     print('\nYou beat the final enemy in the dungeons!')
