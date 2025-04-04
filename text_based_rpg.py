@@ -36,14 +36,15 @@ high_scores = {
     10:0,
 }
 
+score = 0
+
 json_file_dict = {
     'leaderboard':leaderboard,
     'high scores':high_scores,
 }
 
-# Write the PC to a json file
-with open('high_scores.json', 'w') as f:
-    json.dump(json_file_dict, f)
+with open('high_scores.json', 'r') as f:
+    data = json.load(f)
 
 def question_checker(question, answer):
     user_input = 'none given'
@@ -127,6 +128,8 @@ def attack(attacker, attacked):
             time.sleep(1)
             if player_stats['Ability'] == 'double damage' or player_stats['Ability'] == 'rizz':
                 ability(player_stats['Ability'])
+            if attacked['Health'] < 0:
+                attacked['Health'] = 0
             print(f'{attacked['Name']} now has {attacked['Health']} health.')
             time.sleep(1)
             print(f'You also healed {str(player_stats['Healing'])} health points.')
@@ -170,7 +173,7 @@ while continuing == True:
     print('\n'.join("{}: {}".format(k, v) for k, v in enemy_stats.items()))
     input('\n(Press enter to continue) ')
     print('\nYou fight!')
-
+    start_health = enemy_stats['Health']
     while player_stats['Health'] > 0 and enemy_stats['Health'] > 0:
         # The fighting sequence with the 'attack' function.
         time.sleep(1)
@@ -182,9 +185,19 @@ while continuing == True:
             break
     if player_stats['Health'] < 1:
         if game_mode == 'infinite mode':
-            print(f'\nYou killed {enemy_level} enemies and got a score of XYZ.')
-            print('\nYou are nth on the leaderboard.')
-            print('\n'.join("{}: {}".format(k, v) for k, v in high_scores.items()))
+            print(f'\nYou killed {enemy_level} enemies and got a score of {score}.')
+            for i in range(1,11):
+                if score > high_scores[i]:
+                    high_scores[i] = score
+                    leaderboard[i] = f'{player_stats['Name']} - {score}'
+                    break
+            for key, value in high_scores.items():
+                if value == score:
+                    num_on_leaderboard = key
+            print(f'\nYou are number {num_on_leaderboard} on the leaderboard.')
+            print('\n'.join("{}: {}".format(k, v) for k, v in leaderboard.items()))
+            with open('high_scores.json', 'w') as f:
+                json.dump(data, f, indent=4)
 
             break
         else:
@@ -193,6 +206,7 @@ while continuing == True:
     time.sleep(1)
     if enemy_level < 5 and game_mode == 'story mode' or game_mode == 'infinite mode':
         print(f'\nYou earned {str(enemy_stats['Gold reward'])} gold!')
+        score += start_health
         time.sleep(2)
         player_stats['Gold'] = player_stats['Gold'] + enemy_stats['Gold reward']
         print(f'You have in total {player_stats['Gold']} gold.')
