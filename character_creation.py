@@ -17,7 +17,7 @@ player_stats = {
 species = ['human', 'dwarf','wizard', 'sigma']
 
 health_multipliers = {
-    'human':12,
+    'human':3,
     'dwarf':8,
     'wizard':12.1,
     'sigma':13
